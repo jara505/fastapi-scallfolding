@@ -2,12 +2,7 @@ import sys
 import shutil
 import os
 import typer
-
-
-
-MIN_VERSION = (3, 10)
-MAX_VERSION = (3, 13)
-
+from scallfold.project.versions import MIN_VERSION, MAX_VERSION
 
 def check_python_version():
     major, minor = sys.version_info[:2]

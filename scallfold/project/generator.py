@@ -2,6 +2,7 @@ import os
 from jinja2 import Template
 from pathlib import Path
 from typing import Dict
+from scallfold.compatibility import check_python_version
 
 BASE_TEMPLATE_DIR = Path(__file__).resolve().parents[2] / "templates"
 
@@ -59,7 +60,7 @@ def create_project(meta: Dict[str, str]):
         template_files["api/routes.py.j2"] = src_dir / "api/routes.py"
         template_files["core/config.py.j2"] = src_dir / "core/config.py"
         template_files["models/example.py.j2"] = src_dir / "models/example.py"
-        template_files["requirements.txt"] = root / "requirements.txt"
+        template_files["requirements.txt.j2"] = root / "requirements.txt"
         template_files[".env"] = root / ".env"
 
     for template_name, output_path in template_files.items():
@@ -80,5 +81,7 @@ def create_project(meta: Dict[str, str]):
                 render_template(t_path, meta))
         except FileNotFoundError:
             pass
+
+    check_python_version()
 
     print(f"Project created at: {root.resolve()}")
