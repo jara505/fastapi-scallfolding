@@ -1,0 +1,2 @@
+MIN_VERSION = (3, 10)
+MAX_VERSION = (3, 13)
