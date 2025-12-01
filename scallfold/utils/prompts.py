@@ -1,26 +1,41 @@
 from typing import Dict
 from InquirerPy import inquirer
+import re
+
+
+PROJECT_NAME_PATTERN = r"^[a-zA-Z_][a-zA-Z0-9_-]*$"
 
 
 def collect_project_meta() -> Dict[str, str]:
-    name = inquirer.text(message="Project name:",
-                         validate=lambda s: len(s.strip()) > 0).execute()
-    
+    name = inquirer.text(
+        message="Project name:",
+        validate=lambda s: re.match(PROJECT_NAME_PATTERN, s) is not None,
+        invalid_message="Invalid project name. Use letters, numbers, underscore, and hyphen.",
+    ).execute()
+
     style = inquirer.select(message="Project type:",
                             choices=["clean", "structured"]).execute()
-    
-    include_tests = inquirer.confirm(message="Include tests?", default=False).execute()
-    
-    description = inquirer.text(message="Description (optional):", default="").execute()
-    
+
+    include_tests = inquirer.confirm(
+        message="Include tests?", default=True
+    ).execute()
+
+    description = inquirer.text(
+        message="Description (optional):", default=""
+    ).execute()
+
     version = inquirer.text(message="Version: ", default="0.1.0").execute()
-    
+
     use_db = False
     use_orm = False
     if style != "clean":
-        use_db = inquirer.confirm(message="Include database?: ", default=False).execute()
-        use_orm = inquirer.confirm(message="Include ORM?: ", default=False).execute()
-    
+        use_db = inquirer.confirm(
+            message="Include database?: ", default=False
+        ).execute()
+        use_orm = inquirer.confirm(
+            message="Include ORM?: ", default=False
+        ).execute()
+
     return {
         "project_name": name,
         "style": style,

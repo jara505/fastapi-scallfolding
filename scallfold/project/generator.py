@@ -1,87 +1,60 @@
-import os
-from jinja2 import Template
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Any
+
 from scallfold.compatibility import check_python_version
+from scallfold.project.structure import STRUCTURES
+from scallfold.utils.filesystem import ensure_empty_directory
+from scallfold.utils.templating import get_template_path, render_template
 
-BASE_TEMPLATE_DIR = Path(__file__).resolve().parents[2] / "templates"
 
-
-def get_template_path(style: str, name: str) -> Path:
+def create_project(meta: Dict[str, Any]):
     """
-    style = 'clean' | 'structured'
-    name = file template name, e.g., 'pyproject.toml'
+    Generates a project structure based on metadata and a declarative structure map.
     """
-    path = BASE_TEMPLATE_DIR / style / name
-    if not path.exists():
-        raise FileNotFoundError(f"Template not found: {path}")
-    return path
-
-
-def render_template(path: Path, ctx: Dict[str, str]) -> str:
-    content = path.read_text()
-    template = Template(content)
-    return template.render(**ctx)
-
-
-def ensure_empty_directory(path: Path):
-    if path.exists():
-        raise FileNotFoundError(f"Target directory already exists: {path}")
-    path.mkdir(parents=True)
-
-
-def create_project(meta: Dict[str, str]):
-    project_name = meta["project_name"]
     style = meta["style"]
+    project_name = meta["project_name"]
     root = Path(project_name)
+
     ensure_empty_directory(root)
 
-    # src/<project_name>
-    src_dir = root / "src" / project_name
-    src_dir.mkdir(parents=True)
+    base_structure = STRUCTURES.get(style)
+    if not base_structure:
+        raise ValueError(f"Unknown project style: {style}")
 
-    # subfolders para structured
-    if style == "structured":
-        for subfolder in ["api", "core", "models"]:
-            (src_dir / subfolder).mkdir()
-            (src_dir / subfolder / "__init__.py").write_text("")
+    # Make a copy to modify in-place
+    structure = base_structure.copy()
 
-    # archivos a renderizar
-    template_files = {
-        "pyproject.toml.j2": root / "pyproject.toml",
-        "README.md.j2": root / "README.md",
-    }
+    # If not including tests, remove test-related entries
+    if not meta.get("include_tests"):
+        if "tests" in structure.get("dirs", []):
+            structure["dirs"] = [d for d in structure["dirs"] if d != "tests"]
+        if "test_basic.py.j2" in structure.get("templates", {}):
+            # Create a copy of the templates dict to modify it
+            structure["templates"] = structure["templates"].copy()
+            del structure["templates"]["test_basic.py.j2"]
 
-    if style == "clean":
-        template_files["package_init.py.j2"] = src_dir / "__init__.py"
-        template_files[".gitignore"] = root / ".gitignore"
-    elif style == "structured":
-        template_files["main.py.j2"] = src_dir / "main.py"
-        template_files["api/routes.py.j2"] = src_dir / "api/routes.py"
-        template_files["core/config.py.j2"] = src_dir / "core/config.py"
-        template_files["models/example.py.j2"] = src_dir / "models/example.py"
-        template_files["requirements.txt.j2"] = root / "requirements.txt"
-        template_files[".env"] = root / ".env"
+    # Create directories
+    for dir_path in structure.get("dirs", []):
+        path = root / dir_path.format(**meta)
+        path.mkdir(parents=True, exist_ok=True)
 
-    for template_name, output_path in template_files.items():
-        t_path = get_template_path(style, template_name)
-        # solo render si es .j2, si no copiar literal
-        if template_name.endswith(".j2"):
-            output_path.write_text(render_template(t_path, meta))
-        else:
-            output_path.write_text(t_path.read_text())
+    # Render templates
+    for template_name, output_path in structure.get("templates", {}).items():
+        template_path = get_template_path(style, template_name)
+        final_path = root / output_path.format(**meta)
+        final_path.write_text(render_template(template_path, meta))
 
-    # tests
-    if meta.get("include_tests"):
-        tests_dir = root / "tests"
-        tests_dir.mkdir()
-        try:
-            t_path = get_template_path(style, "test_basic.py")
-            (tests_dir / "test_basic.py").write_text(
-                render_template(t_path, meta))
-        except FileNotFoundError:
-            pass
+    # Copy static files
+    for file_name, output_path in structure.get("files", {}).items():
+        static_file_path = get_template_path(style, file_name)
+        final_path = root / output_path.format(**meta)
+        final_path.write_text(static_file_path.read_text())
+
+    # Create empty __init__.py files
+    for init_path in structure.get("init_files", []):
+        path = root / init_path.format(**meta)
+        path.touch()
 
     check_python_version()
 
-    print(f"Project created at: {root.resolve()}")
+    print(f"Project '{project_name}' created successfully at: {root.resolve()}")
