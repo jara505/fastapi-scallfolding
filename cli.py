@@ -1,7 +1,6 @@
 import typer
 from InquirerPy import inquirer
 from scallfold.compatibility import run as check_env
-from scallfold.project.initializer import initialize_project
 from scallfold.project.generator import create_project
 from scallfold.utils.prompts import collect_project_meta
 
