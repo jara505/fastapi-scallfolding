@@ -3,3 +3,4 @@ venv
 .vscode
 __init__.py
 __pycache__
+intrucciones.md
