@@ -1,3 +1,4 @@
+import typer
 from pathlib import Path
 from typing import Dict, Any
 
@@ -7,13 +8,15 @@ from scallfold.utils.filesystem import ensure_empty_directory
 from scallfold.utils.templating import get_template_path, render_template
 
 
-def create_project(meta: Dict[str, Any]):
+def create_project(meta: Dict[str, Any], root_path: Path = None):
     """
     Generates a project structure based on metadata and a declarative structure map.
     """
     style = meta["style"]
     project_name = meta["project_name"]
-    root = Path(project_name)
+    # If a path is provided, use it as the base. Otherwise, use the current directory.
+    base_path = root_path.resolve() if root_path else Path(".")
+    root = base_path / project_name
 
     ensure_empty_directory(root)
 
@@ -57,4 +60,21 @@ def create_project(meta: Dict[str, Any]):
 
     check_python_version()
 
-    print(f"Project '{project_name}' created successfully at: {root.resolve()}")
+    typer.secho(f"\nProject '{project_name}' created successfully!", fg=typer.colors.GREEN, bold=True)
+    typer.secho("\nNext steps:", bold=True)
+
+    # Use relative path for cd command if possible
+    try:
+        cd_path = Path(root).relative_to(Path.cwd())
+    except ValueError:
+        cd_path = root.resolve()
+
+    typer.echo(f"  cd {cd_path}")
+    typer.echo("  poetry install")
+
+    if style == "structured":
+        run_command = f"poetry run uvicorn {project_name}.main:app --reload"
+        typer.secho(f"  {run_command}", bold=True)
+    else: # clean
+        run_command = "poetry run uvicorn main:app --reload"
+        typer.secho(f"  {run_command}", bold=True)
