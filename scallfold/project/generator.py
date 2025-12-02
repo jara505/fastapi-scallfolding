@@ -75,6 +75,6 @@ def create_project(meta: Dict[str, Any], root_path: Path = None):
     if style == "structured":
         run_command = f"poetry run uvicorn {project_name}.main:app --reload"
         typer.secho(f"  {run_command}", bold=True)
-    else: # clean
-        run_command = "poetry run uvicorn main:app --reload"
+    else: # clean - now main.py is also inside src/{project_name}
+        run_command = f"poetry run uvicorn {project_name}.main:app --reload"
         typer.secho(f"  {run_command}", bold=True)

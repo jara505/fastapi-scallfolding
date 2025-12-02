@@ -14,7 +14,7 @@ STRUCTURES = {
         "templates": {
             "pyproject.toml.j2": "pyproject.toml",
             "README.md.j2": "README.md",
-            "main.py.j2": "main.py",
+            "main.py.j2": "src/{project_name}/main.py",
             "package_init.py.j2": "src/{project_name}/__init__.py",
             "test_basic.py.j2": "tests/test_basic.py",
         },
