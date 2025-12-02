@@ -34,6 +34,7 @@ def create_project(meta: Dict[str, Any], root_path: Path = None):
         if meta.get("use_orm"):
             # 'models/base.py.j2' is used by the ORM example
             structure["templates"]["models/base.py.j2"] = "src/{project_name}/models/base.py"
+            structure["templates"]["models/user.py.j2"] = "src/{project_name}/models/user.py"
 
     # If not including tests, remove test-related entries
 

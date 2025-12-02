@@ -35,7 +35,6 @@ STRUCTURES = {
             "main.py.j2": "src/{project_name}/main.py",
             "api/routes.py.j2": "src/{project_name}/api/routes.py",
             "core/config.py.j2": "src/{project_name}/core/config.py",
-            "models/example.py.j2": "src/{project_name}/models/example.py",
             "requirements.txt.j2": "requirements.txt",
             "test_basic.py.j2": "tests/test_basic.py",
         },
