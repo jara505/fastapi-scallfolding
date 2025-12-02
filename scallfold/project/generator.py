@@ -27,6 +27,16 @@ def create_project(meta: Dict[str, Any], root_path: Path = None):
     # Make a copy to modify in-place
     structure = base_structure.copy()
 
+    if style == "structured":
+        if meta.get("use_db"):
+            structure["templates"]["core/database.py.j2"] = "src/{project_name}/core/database.py"
+
+        if meta.get("use_orm"):
+            # 'models/base.py.j2' is used by the ORM example
+            structure["templates"]["models/base.py.j2"] = "src/{project_name}/models/base.py"
+
+    # If not including tests, remove test-related entries
+
     # If not including tests, remove test-related entries
     if not meta.get("include_tests"):
         if "tests" in structure.get("dirs", []):
