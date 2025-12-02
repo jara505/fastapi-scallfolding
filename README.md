@@ -55,7 +55,7 @@ The CLI will guide you through selecting a project name, type, and other options
 You can also provide parameters directly to bypass interactive prompts, which is useful for scripting or quick setups.
 
 ```bash
-fast-forge create --name <project-name> --type <project-type> [--path <output-path>]
+fast-forge create --name <project-name> --type <project-type> [--use-db] [--use-orm] [--path <output-path>]
 ```
 
 **Parameters:**
@@ -64,6 +64,8 @@ fast-forge create --name <project-name> --type <project-type> [--path <output-pa
 *   `--type` or `-t`: The type of project structure to generate.
     *   `clean`: A minimal FastAPI project with a single `main.py` file.
     *   `structured`: A more organized FastAPI project with separate modules for API routes, core configuration, and models.
+*   `--use-db` (Optional): Include database support in the project. Use as a flag (e.g., `--use-db`).
+*   `--use-orm` (Optional): Include ORM (Object-Relational Mapper) support in the project. Use as a flag (e.g., `--use-orm`).
 *   `--path` or `-p` (Optional): The directory where the new project folder will be created. If not specified, the project will be created in the current working directory. If `.` is provided, the project folder will be created inside the current directory.
 
 **Example:**

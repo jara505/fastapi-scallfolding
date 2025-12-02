@@ -22,6 +22,12 @@ def create(
     style: Optional[str] = typer.Option(
         None, "--type", "-t", help="Type of project structure ('clean' or 'structured')."
     ),
+    use_db: Optional[bool] = typer.Option(
+        None, "--use-db", help="Include database support."
+    ),
+    use_orm: Optional[bool] = typer.Option(
+        None, "--use-orm", help="Include ORM support."
+    ),
     path: Optional[Path] = typer.Option(
         None, "--path", "-p", help="Path to create the project in."
     ),
@@ -34,8 +40,8 @@ def create(
         meta = {
             "project_name": name,
             "style": style,
-            "use_db": False,
-            "use_orm": False,
+            "use_db": use_db if use_db is not None else False,
+            "use_orm": use_orm if use_orm is not None else False,
             "include_tests": True,
             "description": "",
             "version": "0.1.0",
@@ -43,6 +49,13 @@ def create(
     else:
         # Otherwise, run the interactive prompts
         meta = collect_project_meta()
+
+    if meta["style"] == "clean" and (meta.get("use_db") or meta.get("use_orm")):
+        typer.secho(
+            "Warning: --use-db and --use-orm flags have no effect with '--type clean'. "
+            "They are only applicable to '--type structured' projects.",
+            fg=typer.colors.YELLOW,
+        )
 
     try:
         # Pass the path to the generator. If path is None, it defaults to the project name.
