@@ -3,6 +3,10 @@ name = "{{ project_name }}"
 version = "{{ version }}"
 description = "{{ description }}"
 
+[tool.poetry]
+# This tells Poetry where to find the package's source code
+packages = [{include = "{{ project_name }}", from = "src"}]
+
 [tool.poetry.dependencies]
 python = "^3.10"
 fastapi = "^0.110.0"
