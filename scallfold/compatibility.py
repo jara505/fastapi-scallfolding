@@ -36,5 +36,4 @@ def check_write_permissions(path="."):
 def run():
     check_python_version()
     check_required_tools()
-    check_write_permissions()
 
