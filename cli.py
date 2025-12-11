@@ -2,12 +2,35 @@ import typer
 from pathlib import Path
 from typing import Optional
 from InquirerPy import inquirer
-from scallfold.compatibility import run as check_env
+from enum import Enum
+import re # Import the re module for regular expressions
+
+from scallfold.compatibility import run as check_env, check_write_permissions
 from scallfold.project.generator import create_project
 from scallfold.utils.prompts import collect_project_meta
 
 app = typer.Typer()
 
+class ProjectStyle(str, Enum):
+    clean = "clean"
+    structured = "structured"
+
+def _validate_project_name(value: str) -> str:
+    """Validate project name to be a valid Python identifier."""
+    if not re.fullmatch(r"^[a-zA-Z_][a-zA-Z0-9_]*$", value):
+        # Sanitize the name by replacing invalid characters with underscores
+        # and ensuring it starts with a letter or underscore
+        sanitized_name = re.sub(r"[^a-zA-Z0-9_]", "_", value)
+        if not re.match(r"^[a-zA-Z_]", sanitized_name):
+            sanitized_name = "_" + sanitized_name
+
+        typer.secho(
+            f"Warning: Project name '{value}' is not a valid Python identifier. "
+            f"It has been sanitized to '{sanitized_name}'.",
+            fg=typer.colors.YELLOW,
+        )
+        return sanitized_name
+    return value
 
 @app.callback()
 def main():
@@ -17,9 +40,9 @@ def main():
 @app.command()
 def create(
     name: Optional[str] = typer.Option(
-        None, "--name", "-n", help="Name of the project."
+        None, "--name", "-n", help="Name of the project.", callback=_validate_project_name
     ),
-    style: Optional[str] = typer.Option(
+    style: Optional[ProjectStyle] = typer.Option(
         None, "--type", "-t", help="Type of project structure ('clean' or 'structured')."
     ),
     use_db: Optional[bool] = typer.Option(
@@ -39,7 +62,7 @@ def create(
         # If arguments are provided, bypass interactive prompts
         meta = {
             "project_name": name,
-            "style": style,
+            "style": style.value, # Access the value of the Enum
             "use_db": use_db if use_db is not None else False,
             "use_orm": use_orm if use_orm is not None else False,
             "include_tests": True,
@@ -50,6 +73,14 @@ def create(
         # Otherwise, run the interactive prompts
         meta = collect_project_meta()
 
+    # Validate flag consistency
+    if meta.get("use_orm") and not meta.get("use_db"):
+        typer.secho(
+            "Error: --use-orm requires --use-db to be enabled.",
+            fg=typer.colors.RED,
+        )
+        raise typer.Exit(1)
+
     if meta["style"] == "clean" and (meta.get("use_db") or meta.get("use_orm")):
         typer.secho(
             "Warning: --use-db and --use-orm flags have no effect with '--type clean'. "
@@ -57,11 +88,21 @@ def create(
             fg=typer.colors.YELLOW,
         )
 
+    # Determine the target path and check for write permissions
+    target_path = path if path else Path(".")
+    check_write_permissions(target_path)
+
     try:
         # Pass the path to the generator. If path is None, it defaults to the project name.
         create_project(meta, root_path=path)
     except FileExistsError as e:
-        typer.secho(str(e), fg=typer.colors.RED)
+        typer.secho(f"Error: {e}", fg=typer.colors.RED)
+        raise typer.Exit(1)
+    except PermissionError:
+        typer.secho("Error: Permission denied. Please check you have write permissions for the target directory.", fg=typer.colors.RED)
+        raise typer.Exit(1)
+    except Exception as e:
+        typer.secho(f"An unexpected error occurred: {e}", fg=typer.colors.RED)
         raise typer.Exit(1)
 
 if __name__ == "__main__":
