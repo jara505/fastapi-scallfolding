@@ -26,6 +26,11 @@ dependencies = [
     "Jinja2>=3.1.2",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["scallfold"]
 
@@ -35,3 +40,9 @@ fast-forge = "cli:app"
 [project.urls]
 "Homepage" = "https://github.com/jara505/fastapi-scallfolding"
 "Bug Tracker" = "https://github.com/jara505/fastapi-scallfolding/issues"
+
+[tool.pytest]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
