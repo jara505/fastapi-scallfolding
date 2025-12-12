@@ -17,6 +17,8 @@ class ProjectStyle(str, Enum):
 
 def _validate_project_name(value: str) -> str:
     """Validate project name to be a valid Python identifier."""
+    if value is None:
+        return None
     if not re.fullmatch(r"^[a-zA-Z_][a-zA-Z0-9_]*$", value):
         # Sanitize the name by replacing invalid characters with underscores
         # and ensuring it starts with a letter or underscore
@@ -73,36 +75,35 @@ def create(
         # Otherwise, run the interactive prompts
         meta = collect_project_meta()
 
-    # Validate flag consistency
+    # Validate flag consistency with improved error messages
     if meta.get("use_orm") and not meta.get("use_db"):
         typer.secho(
-            "Error: --use-orm requires --use-db to be enabled.",
+            "Error: Enable --use-db before using --use-orm. Example: --use-db --use-orm",
             fg=typer.colors.RED,
         )
         raise typer.Exit(1)
 
     if meta["style"] == "clean" and (meta.get("use_db") or meta.get("use_orm")):
         typer.secho(
-            "Warning: --use-db and --use-orm flags have no effect with '--type clean'. "
-            "They are only applicable to '--type structured' projects.",
+            "Warning: --use-db and --use-orm are ignored with '--type clean'. Use '--type structured' for database features.",
             fg=typer.colors.YELLOW,
         )
 
     # Determine the target path and check for write permissions
     target_path = path if path else Path(".")
-    check_write_permissions(target_path)
+    check_write_permissions(str(target_path))
 
     try:
         # Pass the path to the generator. If path is None, it defaults to the project name.
         create_project(meta, root_path=path)
     except FileExistsError as e:
-        typer.secho(f"Error: {e}", fg=typer.colors.RED)
+        typer.secho("Error: Project directory already exists. Choose a different name or path.", fg=typer.colors.RED)
         raise typer.Exit(1)
     except PermissionError:
-        typer.secho("Error: Permission denied. Please check you have write permissions for the target directory.", fg=typer.colors.RED)
+        typer.secho("Error: Permission denied. Check write permissions or select another directory.", fg=typer.colors.RED)
         raise typer.Exit(1)
     except Exception as e:
-        typer.secho(f"An unexpected error occurred: {e}", fg=typer.colors.RED)
+        typer.secho(f"Unexpected error: {e}. Check your inputs or try again.", fg=typer.colors.RED)
         raise typer.Exit(1)
 
 if __name__ == "__main__":
