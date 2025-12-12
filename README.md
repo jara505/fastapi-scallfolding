@@ -37,6 +37,8 @@ If you want to contribute to `fast-forge` or modify its source code:
     pip install -e .
     ```
 
+**Note:** For stability, use Poetry 1.x (e.g., `pip install poetry==1.8.3`) when working with generated projects. Poetry 2.x may have compatibility issues.
+
 ## Usage
 
 `fast-forge` provides a `create` command to generate new FastAPI projects.
