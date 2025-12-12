@@ -1,6 +1,6 @@
 import typer
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from scallfold.compatibility import check_python_version
 from scallfold.project.structure import STRUCTURES
@@ -8,7 +8,7 @@ from scallfold.utils.filesystem import ensure_empty_directory
 from scallfold.utils.templating import get_template_path, render_template
 
 
-def create_project(meta: Dict[str, Any], root_path: Path = None):
+def create_project(meta: Dict[str, Any], root_path: Optional[Path] = None):
     """
     Generates a project structure based on metadata and a declarative structure map.
     """
