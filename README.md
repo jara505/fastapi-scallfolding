@@ -10,6 +10,8 @@ A command-line tool to scaffold FastAPI projects, inspired by `vitejs`.
 
 ### For Users
 
+**Requirements:** Python 3.10 or higher.
+
 To install `fast-forge` and use it to create new projects, it's recommended to use `pipx`. This ensures `fast-forge` and its dependencies are installed in an isolated environment without affecting your global Python packages.
 
 ```bash
@@ -32,9 +34,13 @@ If you want to contribute to `fast-forge` or modify its source code:
     python3 -m venv venv
     source venv/bin/activate
     ```
-3.  **Install in editable mode:**
+3.  **Install in editable mode with dev dependencies:**
     ```bash
-    pip install -e .
+    pip install -e ".[dev]"
+    ```
+4.  **Run tests:**
+    ```bash
+    pytest
     ```
 
 **Note:** For stability, use Poetry 1.x (e.g., `pip install poetry==1.8.3`) when working with generated projects. Poetry 2.x may have compatibility issues.
@@ -104,6 +110,15 @@ Your FastAPI application will typically be available at `http://127.0.0.1:8000`.
 ## Contributing
 
 We welcome contributions! Please feel free to open issues or submit pull requests.
+
+## Testing
+
+To run the test suite:
+```bash
+pytest
+```
+
+Ensure all tests pass before submitting pull requests.
 
 ## License
 
