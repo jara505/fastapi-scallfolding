@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Any
 from InquirerPy import inquirer
 import re
 
@@ -6,7 +6,7 @@ import re
 PROJECT_NAME_PATTERN = r"^[a-zA-Z_][a-zA-Z0-9_-]*$"
 
 
-def collect_project_meta() -> Dict[str, str]:
+def collect_project_meta() -> Dict[str, Any]:
     # Collect project metadata interactively with improved prompts
     name = inquirer.text(
         message="What is your project name?",
