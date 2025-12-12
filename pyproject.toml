@@ -7,7 +7,7 @@ name = "fast-forge"
 version = "0.1.0"
 description = "A command-line tool to scaffold FastAPI projects, inspired by vitejs."
 authors = [
-    { name = "Juan Ignacio Jara Caceres Placeholder", email = "juanignaciojara505@gmail.com" }
+    { name = "Juan Ignacio Jara Caceres", email = "juanignaciojara505@gmail.com" }
 ]
 readme = "README.md"
 requires-python = ">=3.10"

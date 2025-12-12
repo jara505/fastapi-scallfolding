@@ -37,8 +37,6 @@ def create_project(meta: Dict[str, Any], root_path: Optional[Path] = None):
             structure["templates"]["models/user.py.j2"] = "src/{project_name}/models/user.py"
 
     # If not including tests, remove test-related entries
-
-    # If not including tests, remove test-related entries
     if not meta.get("include_tests"):
         if "tests" in structure.get("dirs", []):
             structure["dirs"] = [d for d in structure["dirs"] if d != "tests"]
