@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "scallpy"
-version = "0.1.0"
+version = "0.1.1"
 description = "A command-line tool to scaffold FastAPI projects, inspired by vitejs."
 authors = [
     { name = "Juan Ignacio Jara Caceres", email = "juanignaciojara505@gmail.com" }
@@ -33,6 +33,7 @@ dev = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["scallfold"]
+include = ["templates/**/*"]
 
 [project.scripts]
 scallpy = "scallfold.cli:app"
