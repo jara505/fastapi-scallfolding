@@ -35,7 +35,7 @@ dev = [
 packages = ["scallfold"]
 
 [project.scripts]
-scallpy = "cli:app"
+scallpy = "scallfold.cli:app"
 
 [project.urls]
 "Homepage" = "https://github.com/jara505/fastapi-scallfolding"
