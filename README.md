@@ -1,10 +1,10 @@
-# fast-forge
+# apiforge
 
 A command-line tool to scaffold FastAPI projects, inspired by `vitejs`.
 
 ## Overview
 
-`fast-forge` helps you quickly set up new FastAPI projects with sensible defaults, providing both a "clean" and a "structured" project template.
+`apiforge` helps you quickly set up new FastAPI projects with sensible defaults, providing both a "clean" and a "structured" project template.
 
 ## Installation
 
@@ -12,17 +12,17 @@ A command-line tool to scaffold FastAPI projects, inspired by `vitejs`.
 
 **Requirements:** Python 3.10 or higher.
 
-To install `fast-forge` and use it to create new projects, it's recommended to use `pipx`. This ensures `fast-forge` and its dependencies are installed in an isolated environment without affecting your global Python packages.
+To install `apiforge` and use it to create new projects, it's recommended to use `pipx`. This ensures `apiforge` and its dependencies are installed in an isolated environment without affecting your global Python packages.
 
 ```bash
-pipx install fast-forge
+pipx install apiforge
 ```
 
-After installation, you can use the `fast-forge` command globally.
+After installation, you can use the `apiforge` command globally.
 
-### For Developers (Contributing to fast-forge)
+### For Developers (Contributing to apiforge)
 
-If you want to contribute to `fast-forge` or modify its source code:
+If you want to contribute to `apiforge` or modify its source code:
 
 1.  **Clone the repository:**
     ```bash
@@ -47,14 +47,14 @@ If you want to contribute to `fast-forge` or modify its source code:
 
 ## Usage
 
-`fast-forge` provides a `create` command to generate new FastAPI projects.
+`apiforge` provides a `create` command to generate new FastAPI projects.
 
 ### Interactive Mode
 
 To create a project interactively, simply run:
 
 ```bash
-fast-forge create
+apiforge create
 ```
 The CLI will guide you through selecting a project name, type, and other options.
 
@@ -63,7 +63,7 @@ The CLI will guide you through selecting a project name, type, and other options
 You can also provide parameters directly to bypass interactive prompts, which is useful for scripting or quick setups.
 
 ```bash
-fast-forge create --name <project-name> --type <project-type> [--use-db] [--use-orm] [--path <output-path>]
+apiforge create --name <project-name> --type <project-type> [--use-db] [--use-orm] [--path <output-path>]
 ```
 
 **Parameters:**
@@ -79,12 +79,12 @@ fast-forge create --name <project-name> --type <project-type> [--use-db] [--use-
 **Example:**
 
 ```bash
-fast-forge create --name my-awesome-api --type structured --path ./projects
+apiforge create --name my-awesome-api --type structured --path ./projects
 ```
 
 ## Running Your Generated Project
 
-After `fast-forge` creates your project, it will provide specific instructions. Generally, the steps are:
+After `apiforge` creates your project, it will provide specific instructions. Generally, the steps are:
 
 1.  **Navigate into your new project directory:**
     ```bash
