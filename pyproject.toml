@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "scallpy"
-version = "0.1.1"
+version = "0.1.2"
 description = "A command-line tool to scaffold FastAPI projects, inspired by vitejs."
 authors = [
     { name = "Juan Ignacio Jara Caceres", email = "juanignaciojara505@gmail.com" }
