@@ -1,10 +1,10 @@
-# apiforge
+# scallpy
 
 A command-line tool to scaffold FastAPI projects, inspired by `vitejs`.
 
 ## Overview
 
-`apiforge` helps you quickly set up new FastAPI projects with sensible defaults, providing both a "clean" and a "structured" project template.
+`scallpy` helps you quickly set up new FastAPI projects with sensible defaults, providing both a "clean" and a "structured" project template.
 
 ## Installation
 
@@ -12,17 +12,17 @@ A command-line tool to scaffold FastAPI projects, inspired by `vitejs`.
 
 **Requirements:** Python 3.10 or higher.
 
-To install `apiforge` and use it to create new projects, it's recommended to use `pipx`. This ensures `apiforge` and its dependencies are installed in an isolated environment without affecting your global Python packages.
+To install `scallpy` and use it to create new projects, it's recommended to use `pipx`. This ensures `scallpy` and its dependencies are installed in an isolated environment without affecting your global Python packages.
 
 ```bash
-pipx install apiforge
+pipx install scallpy
 ```
 
-After installation, you can use the `apiforge` command globally.
+After installation, you can use the `scallpy` command globally.
 
-### For Developers (Contributing to apiforge)
+### For Developers (Contributing to scallpy)
 
-If you want to contribute to `apiforge` or modify its source code:
+If you want to contribute to `scallpy` or modify its source code:
 
 1.  **Clone the repository:**
     ```bash
@@ -47,14 +47,14 @@ If you want to contribute to `apiforge` or modify its source code:
 
 ## Usage
 
-`apiforge` provides a `create` command to generate new FastAPI projects.
+`scallpy` provides a `create` command to generate new FastAPI projects.
 
 ### Interactive Mode
 
 To create a project interactively, simply run:
 
 ```bash
-apiforge create
+scallpy create
 ```
 The CLI will guide you through selecting a project name, type, and other options.
 
@@ -63,7 +63,7 @@ The CLI will guide you through selecting a project name, type, and other options
 You can also provide parameters directly to bypass interactive prompts, which is useful for scripting or quick setups.
 
 ```bash
-apiforge create --name <project-name> --type <project-type> [--use-db] [--use-orm] [--path <output-path>]
+scallpy create --name <project-name> --type <project-type> [--use-db] [--use-orm] [--path <output-path>]
 ```
 
 **Parameters:**
@@ -79,12 +79,12 @@ apiforge create --name <project-name> --type <project-type> [--use-db] [--use-or
 **Example:**
 
 ```bash
-apiforge create --name my-awesome-api --type structured --path ./projects
+scallpy create --name my-awesome-api --type structured --path ./projects
 ```
 
 ## Running Your Generated Project
 
-After `apiforge` creates your project, it will provide specific instructions. Generally, the steps are:
+After `scallpy` creates your project, it will provide specific instructions. Generally, the steps are:
 
 1.  **Navigate into your new project directory:**
     ```bash
