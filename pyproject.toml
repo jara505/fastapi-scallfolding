@@ -33,7 +33,6 @@ dev = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["scallfold"]
-include = ["templates/**/*"]
 
 [project.scripts]
 scallpy = "scallfold.cli:app"
