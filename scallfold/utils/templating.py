@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Dict, Any
 from jinja2 import Template
 
-BASE_TEMPLATE_DIR = Path(__file__).resolve().parents[2] / "templates"
+BASE_TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates"
 
 
 def get_template_path(style: str, name: str) -> Path:
