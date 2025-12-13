@@ -1,25 +1,21 @@
-# Agent Guidelines for fast-forge
+#Branch Naming rules
+## format
+- feat — new feature
+- fix — bug fix
+- hotfix — critical production fix
+- refactor — internal code change
+- chore — maintenance/config
+- docs — documentation
+- test — tests
+- perf — performance
+- ci — CI/CD
+- build — build/dependencies
 
-This document outlines the conventions and commands for contributing to the `fast-forge` project.
-
-## Build, Lint, and Test Commands
-
-*   **Build**: `hatch build`
-*   **Lint**: `ruff check .` (check), `ruff format .` (format)
-*   **Test**:
-    *   All tests: `pytest`
-    *   Single file: `pytest <path/to/test_file.py>`
-    *   Specific test: `pytest <path/to/test_file.py>::<test_function_name>`
-
-## Code Style Guidelines
-
-*   **General**: Adhere to PEP 8.
-*   **Imports**: Group standard, third-party, and local imports. Sort alphabetically.
-*   **Formatting**: Use `ruff format`.
-*   **Types**: Use Python type hints.
-*   **Naming**: Follow PEP 8 (`snake_case` for functions/variables, `CamelCase` for classes).
-*   **Error Handling**: Use `try...except` for anticipated errors.
-*   **Docstrings**: Provide clear docstrings for modules, classes, and functions.
+## Rules
+- Prefix is mandatory
+- Use kebab-case
+- One purpose per branch
+- No uppercase, spaces, or underscores
 
 ## Git Commit Guidelines
 
