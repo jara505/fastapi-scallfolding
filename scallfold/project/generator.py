@@ -79,6 +79,7 @@ def create_project(meta: Dict[str, Any], root_path: Optional[Path] = None):
         cd_path = root.resolve()
 
     typer.echo(f"  cd {cd_path}")
+    typer.echo("  pip install poetry==1.8.3")
     typer.echo("  poetry install")
 
     if style == "structured":
