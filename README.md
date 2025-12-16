@@ -16,6 +16,8 @@ To install `scallpy` and use it to create new projects, it's recommended to use 
 
 ```bash
 pipx install scallpy
+
+pip install scallpy
 ```
 
 After installation, you can use the `scallpy` command globally.
