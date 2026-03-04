@@ -19,7 +19,7 @@ def _validate_project_name(value: str) -> str:
     """Validate project name using the shared pattern from prompts."""
     if value is None:
         return None
-    if not re.match(PROJECT_NAME_PATTERN, value):
+    if not re.fullmatch(PROJECT_NAME_PATTERN, value):
         sanitized_name = re.sub(r"[^a-zA-Z0-9_-]", "_", value)
         if not re.match(r"^[a-zA-Z_]", sanitized_name):
             sanitized_name = "_" + sanitized_name
