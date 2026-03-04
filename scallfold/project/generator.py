@@ -9,14 +9,20 @@ from scallfold.utils.filesystem import ensure_empty_directory
 from scallfold.utils.templating import get_template_path, render_template
 
 
-def create_project(meta: Dict[str, Any], root_path: Optional[Path] = None):
+def create_project(meta: Dict[str, Any], root_path: Optional[Path] = None, silent: bool = False):
     """
     Generates a project structure based on metadata and a declarative structure map.
+    
+    Args:
+        meta: Project metadata dictionary
+        root_path: Where to create the project
+        silent: If True, skip printing the "Next steps" guide
     """
     style = meta["style"]
     project_name = meta["project_name"]
     # If a path is provided, use it as the base. Otherwise, use the current directory.
-    base_path = root_path.resolve() if root_path else Path(".")
+    # Use absolute path for consistent behavior with subprocess calls
+    base_path = (root_path.resolve() if root_path else Path.cwd())
     root = base_path / project_name
 
     ensure_empty_directory(root)
@@ -69,21 +75,25 @@ def create_project(meta: Dict[str, Any], root_path: Optional[Path] = None):
         path.touch()
 
     typer.secho(f"\nProject '{project_name}' created successfully!", fg=typer.colors.GREEN, bold=True)
-    typer.secho("\nNext steps:", bold=True)
+    
+    if not silent:
+        typer.secho("\nNext steps:", bold=True)
 
-    # Use relative path for cd command if possible
-    try:
-        cd_path = Path(root).relative_to(Path.cwd())
-    except ValueError:
-        cd_path = root.resolve()
+        # Use relative path for cd command if possible
+        try:
+            cd_path = Path(root).relative_to(Path.cwd())
+        except ValueError:
+            cd_path = root.resolve()
 
-    typer.echo(f"  cd {cd_path}")
-    typer.echo("  pip install poetry==1.8.3")
-    typer.echo("  poetry install")
+        typer.echo(f"  cd {cd_path}")
+        typer.echo("  pip install poetry==1.8.3")
+        typer.echo("  poetry install")
 
-    if style == "structured":
-        run_command = f"poetry run uvicorn {project_name}.main:app --reload"
-        typer.secho(f"  {run_command}", bold=True)
-    else: # clean - now main.py is also inside src/{project_name}
-        run_command = f"poetry run uvicorn {project_name}.main:app --reload"
-        typer.secho(f"  {run_command}", bold=True)
+        if style == "structured":
+            run_command = f"poetry run uvicorn {project_name}.main:app --reload"
+            typer.secho(f"  {run_command}", bold=True)
+        else: # clean - now main.py is also inside src/{project_name}
+            run_command = f"poetry run uvicorn {project_name}.main:app --reload"
+            typer.secho(f"  {run_command}", bold=True)
+    
+    return root

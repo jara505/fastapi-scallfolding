@@ -78,9 +78,11 @@ Get started quickly with a structured project including database and ORM:
 
 ```bash
 scallpy create --name my-api --type structured --use-db --use-orm
-cd my-api
-pip install poetry==1.8.3
-poetry install
+```
+
+That's it! The project is created, dependencies are installed, and it's ready to run. Just execute:
+
+```bash
 poetry run uvicorn my-api.main:app --reload
 ```
 
@@ -144,27 +146,11 @@ myproject/
 
 ## Running Your Generated Project
 
-After `scallpy` creates your project, it will provide specific instructions. Generally, the steps are:
+After `scallpy` creates your project with arguments (non-interactive mode), the dependencies are already installed. Just run:
 
-1.  **Navigate into your new project directory:**
-    ```bash
-    cd <your-project-name>
-    ```
-2.  **Install dependencies using Poetry:**
-    ```bash
-    pip install poetry==1.8.3
-    poetry install
-    ```
-3.  **Run the FastAPI development server:**
-    *   **For `clean` projects:**
-        ```bash
-        poetry run uvicorn <your-project-name>.main:app --reload
-        ```
-    *   **For `structured` projects:**
-        ```bash
-        poetry run uvicorn <your-project-name>.main:app --reload
-        ```
-    (Replace `<your-project-name>` with the actual name you gave your project).
+```bash
+poetry run uvicorn <your-project-name>.main:app --reload
+```
 
 Your FastAPI application will typically be available at `http://127.0.0.1:8000`.
 

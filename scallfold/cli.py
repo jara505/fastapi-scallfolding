@@ -8,6 +8,7 @@ import re
 from scallfold.compatibility import run as check_env, check_write_permissions
 from scallfold.project.generator import create_project
 from scallfold.utils.prompts import PROJECT_NAME_PATTERN, collect_project_meta
+from scallfold.utils.setup import setup_project
 
 app = typer.Typer()
 
@@ -58,6 +59,9 @@ def create(
     """
     Creates a new FastAPI project.
     """
+    # Check if running in non-interactive mode (arguments provided)
+    auto_setup = bool(name and style)
+    
     if name and style:
         # If arguments are provided, bypass interactive prompts
         meta = {
@@ -93,7 +97,21 @@ def create(
 
     try:
         # Pass the path to the generator. If path is None, it defaults to the project name.
-        create_project(meta, root_path=path)
+        project_path = create_project(meta, root_path=path, silent=auto_setup)
+        
+        # If auto_setup is enabled, automatically set up the project
+        if auto_setup and project_path:
+            typer.secho(f"\n🚀 Running automatic setup for '{meta['project_name']}'...", fg=typer.colors.CYAN, bold=True)
+            success = setup_project(project_path)
+            if success:
+                run_command = f"poetry run uvicorn {meta['project_name']}.main:app --reload"
+                typer.secho(f"\n✨ All set! Run your project with:", fg=typer.colors.GREEN, bold=True)
+                typer.echo(f"  cd {project_path.name}")
+                typer.secho(f"  {run_command}", bold=True)
+            else:
+                typer.secho("\n⚠ Setup failed. You can run it manually:", fg=typer.colors.YELLOW)
+                typer.echo(f"  cd {project_path.name}")
+                typer.echo("  poetry install")
     except FileExistsError as e:
         typer.secho("Error: Project directory already exists. Choose a different name or path.", fg=typer.colors.RED)
         raise typer.Exit(1)
