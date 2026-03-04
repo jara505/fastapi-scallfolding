@@ -39,4 +39,5 @@ def test_structured_structure_has_required_keys():
     assert "main.py.j2" in structured["templates"]
     assert "api/routes.py.j2" in structured["templates"]
     assert ".gitignore" in structured["files"]
-    assert ".env" in structured["files"]
+    assert ".env" not in structured["files"]
+    assert "requirements.txt.j2" not in structured["templates"]
