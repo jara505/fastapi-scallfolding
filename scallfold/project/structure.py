@@ -35,12 +35,10 @@ STRUCTURES = {
             "main.py.j2": "src/{project_name}/main.py",
             "api/routes.py.j2": "src/{project_name}/api/routes.py",
             "core/config.py.j2": "src/{project_name}/core/config.py",
-            "requirements.txt.j2": "requirements.txt",
             "test_basic.py.j2": "tests/test_basic.py",
         },
         "files": {
             ".gitignore": ".gitignore",
-            ".env": ".env",
         },
         "init_files": [
             "src/{project_name}/__init__.py",
