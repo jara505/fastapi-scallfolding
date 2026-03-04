@@ -40,10 +40,11 @@ def create_project(meta: Dict[str, Any], root_path: Optional[Path] = None):
     if not meta.get("include_tests"):
         if "tests" in structure.get("dirs", []):
             structure["dirs"] = [d for d in structure["dirs"] if d != "tests"]
-        if "test_basic.py.j2" in structure.get("templates", {}):
-            # Create a copy of the templates dict to modify it
-            structure["templates"] = structure["templates"].copy()
-            del structure["templates"]["test_basic.py.j2"]
+        test_templates = ["test_basic.py.j2", "conftest.py.j2"]
+        structure["templates"] = {
+            k: v for k, v in structure.get("templates", {}).items()
+            if k not in test_templates
+        }
 
     # Create directories
     for dir_path in structure.get("dirs", []):

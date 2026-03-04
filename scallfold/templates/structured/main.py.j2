@@ -1,25 +1,29 @@
+{% if use_db %}
+from contextlib import asynccontextmanager
+
+{% endif %}
 from fastapi import FastAPI
 from .api.routes import router as api_router
 {% if use_db %}
 from .core.database import Base, engine
 
 
-def create_db_tables():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
+    yield
 {% endif %}
 
-app = FastAPI(title="{{ project_name }}")
+app = FastAPI(
+    title="{{ project_name }}",
+{% if use_db %}
+    lifespan=lifespan,
+{% endif %}
+)
 
 
 @app.get("/")
 def read_root():
     return {"message": "API is running"}
-{% if use_db %}
-
-
-@app.on_event("startup")
-async def startup_event():
-    create_db_tables()
-{% endif %}
 
 app.include_router(api_router)
