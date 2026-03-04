@@ -4,7 +4,7 @@ import os
 import typer
 
 MIN_VERSION = (3, 10)
-MAX_VERSION = (3, 13)
+MAX_VERSION = (3, 14)
 
 def check_python_version():
     major, minor = sys.version_info[:2]
