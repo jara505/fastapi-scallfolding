@@ -1,8 +1,9 @@
+import copy
+
 import typer
 from pathlib import Path
 from typing import Dict, Any, Optional
 
-from scallfold.compatibility import check_python_version
 from scallfold.project.structure import STRUCTURES
 from scallfold.utils.filesystem import ensure_empty_directory
 from scallfold.utils.templating import get_template_path, render_template
@@ -24,8 +25,7 @@ def create_project(meta: Dict[str, Any], root_path: Optional[Path] = None):
     if not base_structure:
         raise ValueError(f"Unknown project style: {style}")
 
-    # Make a copy to modify in-place
-    structure = base_structure.copy()
+    structure = copy.deepcopy(base_structure)
 
     if style == "structured":
         if meta.get("use_db"):
@@ -66,8 +66,6 @@ def create_project(meta: Dict[str, Any], root_path: Optional[Path] = None):
     for init_path in structure.get("init_files", []):
         path = root / init_path.format(**meta)
         path.touch()
-
-    check_python_version()
 
     typer.secho(f"\nProject '{project_name}' created successfully!", fg=typer.colors.GREEN, bold=True)
     typer.secho("\nNext steps:", bold=True)

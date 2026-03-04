@@ -3,11 +3,11 @@ from pathlib import Path
 from typing import Optional
 from InquirerPy import inquirer
 from enum import Enum
-import re # Import the re module for regular expressions
+import re
 
 from scallfold.compatibility import run as check_env, check_write_permissions
 from scallfold.project.generator import create_project
-from scallfold.utils.prompts import collect_project_meta
+from scallfold.utils.prompts import PROJECT_NAME_PATTERN, collect_project_meta
 
 app = typer.Typer()
 
@@ -16,18 +16,16 @@ class ProjectStyle(str, Enum):
     structured = "structured"
 
 def _validate_project_name(value: str) -> str:
-    """Validate project name to be a valid Python identifier."""
+    """Validate project name using the shared pattern from prompts."""
     if value is None:
         return None
-    if not re.fullmatch(r"^[a-zA-Z_][a-zA-Z0-9_]*$", value):
-        # Sanitize the name by replacing invalid characters with underscores
-        # and ensuring it starts with a letter or underscore
-        sanitized_name = re.sub(r"[^a-zA-Z0-9_]", "_", value)
+    if not re.match(PROJECT_NAME_PATTERN, value):
+        sanitized_name = re.sub(r"[^a-zA-Z0-9_-]", "_", value)
         if not re.match(r"^[a-zA-Z_]", sanitized_name):
             sanitized_name = "_" + sanitized_name
 
         typer.secho(
-            f"Warning: Project name '{value}' is not a valid Python identifier. "
+            f"Warning: Project name '{value}' is not valid. "
             f"It has been sanitized to '{sanitized_name}'.",
             fg=typer.colors.YELLOW,
         )
