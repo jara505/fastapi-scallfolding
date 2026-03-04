@@ -73,10 +73,10 @@ def create_project(meta: Dict[str, Any], root_path: Optional[Path] = None, silen
     for init_path in structure.get("init_files", []):
         path = root / init_path.format(**meta)
         path.touch()
-
-    typer.secho(f"\nProject '{project_name}' created successfully!", fg=typer.colors.GREEN, bold=True)
     
+    # Show next steps only when not in silent mode
     if not silent:
+        typer.secho(f"\nProject '{project_name}' created successfully!", fg=typer.colors.GREEN, bold=True)
         typer.secho("\nNext steps:", bold=True)
 
         # Use relative path for cd command if possible
