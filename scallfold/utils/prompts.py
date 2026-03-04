@@ -3,14 +3,14 @@ from InquirerPy import inquirer
 import re
 
 
-PROJECT_NAME_PATTERN = r"^[a-zA-Z_][a-zA-Z0-9_-]*$"
+PROJECT_NAME_PATTERN = r"[a-zA-Z_][a-zA-Z0-9_-]*"
 
 
 def collect_project_meta() -> Dict[str, Any]:
     # Collect project metadata interactively with improved prompts
     name = inquirer.text(
         message="What is your project name?",
-        validate=lambda s: re.match(PROJECT_NAME_PATTERN, s) is not None,
+        validate=lambda s: re.fullmatch(PROJECT_NAME_PATTERN, s) is not None,
         invalid_message="Invalid project name. Use letters, numbers, underscore, and hyphen.",
     ).execute()
 
@@ -30,13 +30,13 @@ def collect_project_meta() -> Dict[str, Any]:
     use_db = False
     use_orm = False
     if style != "clean":
-        # Additional options for structured projects
         use_db = inquirer.confirm(
             message="Include database support?", default=False
         ).execute()
-        use_orm = inquirer.confirm(
-            message="Include ORM support?", default=False
-        ).execute()
+        if use_db:
+            use_orm = inquirer.confirm(
+                message="Include ORM support?", default=False
+            ).execute()
 
     return {
         "project_name": name,

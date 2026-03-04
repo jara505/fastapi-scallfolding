@@ -17,13 +17,8 @@ def test_get_template_path_not_exists():
 
 
 def test_render_template():
-    """Test template rendering."""
-    # Create a simple template
-    template_content = "Hello {{ name }}!"
-    ctx = {"name": "World"}
-
-    # Mock a path
-    from unittest.mock import patch
-    with patch('pathlib.Path.read_text', return_value=template_content):
-        result = render_template(Path("dummy"), ctx)
-        assert result == "Hello World!"
+    """Test template rendering with a real template file."""
+    path = get_template_path("clean", "main.py.j2")
+    ctx = {"project_name": "testapp", "version": "0.1.0", "description": "test"}
+    result = render_template(path, ctx)
+    assert "FastAPI" in result
