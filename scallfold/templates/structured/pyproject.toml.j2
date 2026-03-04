@@ -9,12 +9,12 @@ packages = [{include = "{{ project_name }}", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.110.0"
-uvicorn = "^0.23.0"
+fastapi = "^0.115.0"
+uvicorn = "^0.34.0"
 pydantic = "^2.6.2"
+pydantic-settings = "^2.2.0"
 {% if use_db or use_orm %}
-sqlalchemy = "^1.4.39" # For ORM/DB integration
-# psycopg2-binary = "^2.9.3" # Example for PostgreSQL
+sqlalchemy = "^2.0.0"
 {% endif %}
 
 [tool.poetry.dev-dependencies]
