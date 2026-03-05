@@ -80,11 +80,7 @@ Get started quickly with a structured project including database and ORM:
 scallpy create --name my-api --type structured --use-db --use-orm
 ```
 
-That's it! The project is created, dependencies are installed, and it's ready to run. Just execute:
-
-```bash
-poetry run uvicorn my-api.main:app --reload
-```
+That's it! The project is created, dependencies are installed, and the server automatically starts. You'll see the API running at `http://127.0.0.1:8000`. You can stop it by pressing `Ctrl+C`.
 
 Visit `http://127.0.0.1:8000` to see your API running!
 
@@ -146,13 +142,7 @@ myproject/
 
 ## Running Your Generated Project
 
-After `scallpy` creates your project with arguments (non-interactive mode), the dependencies are already installed. Just run:
-
-```bash
-poetry run uvicorn <your-project-name>.main:app --reload
-```
-
-Your FastAPI application will typically be available at `http://127.0.0.1:8000`.
+After `scallpy` creates your project (in both interactive and non-interactive modes), the dependencies are installed, and the server is automatically launched. You'll find your FastAPI application running at `http://127.0.0.1:8000`. You can stop it by pressing `Ctrl+C`.
 
 **Note:** Generated projects use Poetry for dependency management. Install Poetry 1.8.3 (`pip install poetry==1.8.3`) to avoid compatibility issues with Poetry 2.x, which may cause errors in some environments. Poetry ensures reproducible builds and virtual environments.
 
