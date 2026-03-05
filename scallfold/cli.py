@@ -1,9 +1,11 @@
 import typer
+import os
 from pathlib import Path
 from typing import Optional
 from InquirerPy import inquirer
 from enum import Enum
 import re
+import sys
 
 from scallfold.compatibility import run as check_env, check_write_permissions
 from scallfold.project.generator import create_project
@@ -106,20 +108,28 @@ def create(
             if success:
                 # Run the server automatically using the local venv (poetry uses .venv by default)
                 project_name = meta['project_name']
-                uvicorn_cmd = f"{project_path}/.venv/bin/python -m uvicorn {project_name}.main:app --reload --host 127.0.0.1 --port 8000"
+                uvicorn_cmd = [f"{project_path}/.venv/bin/python", "-m", "uvicorn", f"{project_name}.main:app", "--reload", "--host", "127.0.0.1", "--port", "8000"]
                 
-                # Start server in background
-                import subprocess
-                subprocess.Popen(
-                    uvicorn_cmd.split(),
-                    cwd=str(project_path),
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                    start_new_session=True,
-                )
+                # Clean venv environment variables to avoid conflicts when running from a dev venv
+                env = os.environ.copy()
+                env.pop("VIRTUAL_ENV", None)
                 
                 typer.secho(f"\n✨ All set! Your API is running at: http://127.0.0.1:8000", fg=typer.colors.GREEN, bold=True)
-                typer.secho("   Press Ctrl+C to stop the server", fg=typer.colors.YELLOW)
+                typer.secho("Press Ctrl+C to stop the server\n", fg=typer.colors.YELLOW)
+                
+                # Run server in foreground so user can stop with Ctrl+C
+                import subprocess
+                try:
+                    subprocess.run(
+                        uvicorn_cmd,
+                        cwd=str(project_path),
+                        env=env,
+                        stdin=sys.stdin,    # Explicitly inherit stdin
+                        stdout=sys.stdout,  # Explicitly inherit stdout
+                        stderr=sys.stderr,  # Explicitly inherit stderr
+                    )
+                except KeyboardInterrupt:
+                    typer.secho("\n\nServer stopped.", fg=typer.colors.CYAN)
             else:
                 typer.secho("\n⚠ Setup failed. You can run it manually:", fg=typer.colors.YELLOW)
                 typer.echo(f"  cd {project_path.name}")

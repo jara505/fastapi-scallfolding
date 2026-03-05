@@ -8,8 +8,14 @@ import typer
 
 def setup_project(project_path: Path):
     """Creates a venv, installs Poetry 1.8.3, and runs poetry install."""
-    venv_path = project_path / "venv"
+    # Use .venv to match Poetry's default behavior
+    venv_path = project_path / ".venv"
     python = sys.executable
+    
+    # Clean environment to avoid conflicts with active venv
+    clean_env = os.environ.copy()
+    clean_env.pop("VIRTUAL_ENV", None)
+    clean_env["POETRY_VIRTUALENVS_IN_PROJECT"] = "true"
 
     typer.secho("\n⚙ Setting up project...", fg=typer.colors.CYAN, bold=True)
 
@@ -20,6 +26,7 @@ def setup_project(project_path: Path):
             [python, "-m", "venv", str(venv_path)],
             capture_output=True, text=True,
             timeout=60,
+            env=clean_env,
         )
     except subprocess.TimeoutExpired:
         typer.secho("  Failed to create venv: Timeout", fg=typer.colors.RED)
@@ -47,6 +54,7 @@ def setup_project(project_path: Path):
             [pip, "install", "poetry==1.8.3", "-q"],
             capture_output=True, text=True,
             timeout=120,
+            env=clean_env,
         )
     except subprocess.TimeoutExpired:
         typer.secho("  Failed to install Poetry: Timeout", fg=typer.colors.RED)
@@ -68,7 +76,7 @@ def setup_project(project_path: Path):
             capture_output=True,
             text=True,
             timeout=300,
-            env={**os.environ, "POETRY_VIRTUALENVS_IN_PROJECT": "true"},
+            env=clean_env,
         )
     except subprocess.TimeoutExpired:
         typer.secho("  Failed to install dependencies: Timeout", fg=typer.colors.RED)
