@@ -1,6 +1,6 @@
 # scallpy
 
-[![PyPI version](https://img.shields.io/pypi/v/scallpy)](https://pypi.org/project/scallpy/) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/jara505/fastapi-scallfolding/blob/main/LICENSE) [![Python Version](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
+[![PyPI version](https://img.shields.io/pypi/v/scallpy)](https://pypi.org/project/scallpy/) [![License](https://img.shields.io/badge/license-Proprietary-red.svg)](https://github.com/jara505/fastapi-scallfolding/blob/main/LICENSE) [![Python Version](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 
 A command-line tool to scaffold FastAPI projects, inspired by `vitejs`.
 
@@ -25,29 +25,6 @@ pip install scallpy
 ```
 
 After installation, you can use the `scallpy` command globally.
-
-### For Developers (Contributing to scallpy)
-
-If you want to contribute to `scallpy` or modify its source code:
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/jara505/fastapi-scallfolding.git
-    cd fastapi-scallfolding
-    ```
-2.  **Create and activate a virtual environment:**
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
-3.  **Install in editable mode with dev dependencies:**
-    ```bash
-    pip install -e ".[dev]"
-    ```
-4.  **Run tests:**
-    ```bash
-    pytest
-    ```
 
 **Note:** For stability, use Poetry 1.x (e.g., `pip install poetry==1.8.3`) when working with generated projects. Poetry 2.x may have compatibility issues.
 
@@ -156,19 +133,6 @@ Your FastAPI application will typically be available at `http://127.0.0.1:8000`.
 
 **Note:** Generated projects use Poetry for dependency management. Install Poetry 1.8.3 (`pip install poetry==1.8.3`) to avoid compatibility issues with Poetry 2.x, which may cause errors in some environments. Poetry ensures reproducible builds and virtual environments.
 
-## Contributing
-
-We welcome contributions! Please feel free to open issues or submit pull requests.
-
-## Testing
-
-To run the test suite:
-```bash
-pytest
-```
-
-Ensure all tests pass before submitting pull requests.
-
 ## License
 
-This project is licensed under the MIT License.
+This project is proprietary software. The source code is publicly available for **viewing and reference purposes only**. Copying, modification, distribution, and commercial use are strictly prohibited without prior written authorization. See the [LICENSE](LICENSE) file for details.
